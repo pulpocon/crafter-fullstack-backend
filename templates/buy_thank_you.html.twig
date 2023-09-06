@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<div class="container py-3">
+    <main class="buy-thanks p-3">
+        <header class="mb-5 text-center">
+            <h2 class="mb-3 fw-bold">Gracias por tu compra</h2>
+            <p>Recibirás un email con el código QR que te dará acceso al evento.</p>
+        </header>
+        <div class="card mb-3 rounded-1 shadow-sm p-0 mb-5">
+            <div class="card-header py-3">
+                <h4 class="my-0 fw-normal">
+                    <i class="bi bi-person-badge-fill"></i>
+                    Tus datos
+                </h4>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">Referencia:</dt>
+                    <dd class="col-sm-9">{{ ticket.reference }}</dd>
+                    <dt class="col-sm-3">Tipo de entrada:</dt>
+                    <dd class="col-sm-9">{{ ticket.ticketPlan.name }}</dd>
+                    <dt class="col-sm-3">Nombre y apellidos:</dt>
+                    <dd class="col-sm-9">{{ ticket.name }} {{ ticket.surname }}</dd>
+                    <dt class="col-sm-3">Email:</dt>
+                    <dd class="col-sm-9">{{ ticket.email }}</dd>
+                    <dt class="col-sm-3">Camiseta:</dt>
+                    <dd class="col-sm-9">{{ ticket.shirtSize }}, {{ ticket.shirtType }}</dd>
+                    <dt class="col-sm-3">Alimentación:</dt>
+                    <dd class="col-sm-9">{{ ticket.feeding }}<br />{{ ticket.allergies }}</dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <a href="/" class="btn btn-lg btn-primary">Comprar otra entrada</a>
+        </div>
+    </main>
+</div>
+{% endblock %}

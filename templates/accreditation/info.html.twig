@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block body %}
+<div class="container py-3">
+    <main class="buy-thanks p-3">
+        <header class="text-center">
+            <h2 class="mb-3 fw-bold" style="word-break: break-all">{{ attendee.reference }}</h2>
+        </header>
+        <div class="text-center mb-3">
+            <a href="{{ path('accreditation_scan') }}" title="" class="btn btn-secondary">Volver</a>
+        </div>
+        <div class="card mb-3 rounded-1 shadow-sm p-0 mb-5">
+            <div class="card-header py-3">
+                <h4 class="my-0 fw-normal">
+                    <i class="bi bi-person-badge-fill"></i>
+                    {{ attendee.name }} {{ attendee.surname }}
+                </h4>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">Acceso:</dt>
+                    <dd class="col-sm-9">{{ attendee.ticketPlan.accessTo | join(', ') }}</dd>
+                    <dt class="col-sm-3">Camiseta:</dt>
+                    <dd class="col-sm-9">{{ attendee.shirtType }} {{ attendee.shirtSize }}</dd>
+                    <dt class="col-sm-3">Alimentación:</dt>
+                    <dd class="col-sm-9">{{ attendee.feeding }}<br /></dd>
+                    <dt class="col-sm-3">Alergias:</dt>
+                    <dd class="col-sm-9">{{ attendee.allergies }}</dd>
+                </dl>
+            </div>
+        </div>
+        <div class="text-center mb-3">
+            <a href="{{ path('accreditation_scan') }}" title="" class="btn btn-secondary">Volver</a>
+        </div>
+    </main>
+</div>
+{% endblock %}

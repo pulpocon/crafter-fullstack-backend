@@ -1,0 +1,8 @@
+twig:
+    default_path: '%kernel.project_dir%/templates'
+    globals:
+        paypal_client_id: '%env(PAYPAL_CLIENT_ID)%'
+        paypal_currency: '%env(PAYPAL_CURRENCY)%'
+when@test:
+    twig:
+        strict_variables: true

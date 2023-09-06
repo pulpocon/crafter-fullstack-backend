@@ -1,0 +1,140 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}Dashboard{% endblock %}
+
+{% block main %}
+    <style>
+        table#revenue-table tr:last-child td { font-weight: 700; }
+    </style>
+    <div class="container-fluid">
+        <div class="row row-cols-1 mt-4">
+            <h2>Número de asistentes por día o acción</h2>
+            <table class="table table-striped" id="revenue-table">
+                <thead>
+                <tr>
+                    <th>Ticket Plan</th>
+                    <th class="text-right">Speakers</th>
+                    <th class="text-right">Sponsors</th>
+                    <th class="text-right">Paid</th>
+                    <th class="text-right">Attendees</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for attendee in attendees %}
+                    <tr>
+                        <td>{{ attendee.name }}</td>
+                        <td class="text-right">{{ attendee.speakers }}</td>
+                        <td class="text-right">{{ attendee.sponsors }}</td>
+                        <td class="text-right">{{ attendee.paid }}</td>
+                        <td class="text-right">{{ attendee.attendees }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="row row-cols-1 mt-4">
+            <h2>Información sobre camiseta y tipo de alimentación</h2>
+            <table class="table table-striped" id="revenue-table">
+                <thead>
+                <tr>
+                    <th colspan="7">Camiseta Hombre</th>
+                    <th colspan="7">Camiseta Mujer</th><th colspan="3">Tipo de alimentación</th>
+                </tr>
+                <tr>
+                    <th>XS</th>
+                    <th>S</th>
+                    <th>M</th>
+                    <th>L</th>
+                    <th>XL</th>
+                    <th>XXL</th>
+                    <th>XXXL</th>
+                    <th>XS</th>
+                    <th>S</th>
+                    <th>M</th>
+                    <th>L</th>
+                    <th>XL</th>
+                    <th>XXL</th>
+                    <th>XXXL</th>
+                    <th>Omnivoro</th>
+                    <th>Vegetariano</th>
+                    <th>Vegano</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{{ information.hombre.xs }}</td>
+                    <td>{{ information.hombre.s }}</td>
+                    <td>{{ information.hombre.m }}</td>
+                    <td>{{ information.hombre.l }}</td>
+                    <td>{{ information.hombre.xl }}</td>
+                    <td>{{ information.hombre.xxl }}</td>
+                    <td>{{ information.hombre.xxxl }}</td>
+                    <td>{{ information.mujer.xs }}</td>
+                    <td>{{ information.mujer.s }}</td>
+                    <td>{{ information.mujer.m }}</td>
+                    <td>{{ information.mujer.l }}</td>
+                    <td>{{ information.mujer.xl }}</td>
+                    <td>{{ information.mujer.xxl }}</td>
+                    <td>{{ information.mujer.xxxl }}</td>
+                    <td>{{ information.Omnivoro }}</td>
+                    <td>{{ information.Vegetariano }}</td>
+                    <td>{{ information.Vegano }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row row-cols-1 mt-4">
+            <h2>Cuentas PulpoCon22</h2>
+            <table class="table table-striped" id="revenue-table">
+                <thead>
+                <tr>
+                    <th>Ticket Plan</th>
+                    <th class="text-right">Tickets sold</th>
+                    <th class="text-right">Paid</th>
+                    <th class="text-right">Fee</th>
+                    <th class="text-right">Net amount</th>
+                    <th class="text-right">IVA</th>
+                    <th class="text-right">to PulpoCon</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for rev in revenue %}
+                    <tr>
+                        <td>{{ rev.name }}</td>
+                        <td class="text-right">{{ rev.tickets }}</td>
+                        <td class="text-right">{{ rev.paid | format_currency('EUR', {fraction_digit: 2}) }}</td>
+                        <td class="text-right">{{ rev.fee | format_currency('EUR', {fraction_digit: 2}) }}</td>
+                        <td class="text-right">{{ rev.net | format_currency('EUR', {fraction_digit: 2}) }}</td>
+                        <td class="text-right">{{ rev.tax | format_currency('EUR', {fraction_digit: 2}) }}</td>
+                        <td class="text-right">{{ rev.cash | format_currency('EUR', {fraction_digit: 2}) }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="row row-cols-2">
+            <div>
+                {{ render_chart(percentTicketsSold) }}
+            </div>
+            <div>
+                {{ render_chart(salesPerDay) }}
+            </div>
+        </div>
+    </div>
+{#    <table class="datagrid">
+        <thead>
+        <tr>
+            <td>Some Column</td>
+            <td>Another Column</td>
+        </tr>
+        </thead>
+        <tbody>
+        {% for data in my_own_data %}
+            <tr>
+                <td>{{ data.someColumn }}</td>
+                <td>{{ data.anotherColumn }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>#}
+{% endblock %}

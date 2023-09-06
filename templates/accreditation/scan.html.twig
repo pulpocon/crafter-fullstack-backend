@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="/html5-qrcode.min.js"></script>
+{% endblock %}
+{% block body %}
+    <h1 class="mt-2 mb-4 text-center">Acreditación - QR Scanner</h1>
+        <div id="reader" class="m-auto w-100"></div>
+    <script>
+        function onScanSuccess(decodedText) {
+            html5QrcodeScanner.clear().then(ignore => {
+                window.location.replace(`/accreditation/${decodedText}`);
+            })
+        }
+
+        var html5QrcodeScanner = new Html5QrcodeScanner(
+            "reader", { fps: 10, qrbox: 250 });
+        html5QrcodeScanner.render(onScanSuccess);
+    </script>
+{% endblock %}

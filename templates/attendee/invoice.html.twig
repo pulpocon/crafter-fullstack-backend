@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="p-3">
+        <div class="pb-3 text-center">
+            <h2>{{ title }}</h2>
+        </div>
+        <div class="col-auto">
+            {{ form(formInvoice) }}
+        </div>
+    </div>
+{% endblock %}

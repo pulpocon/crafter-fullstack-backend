@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="container py-3">
+        <main>
+            <div class="container py-3">
+                <div class="px-4 py-5 my-5 text-center">
+                    <h1 class="display-5 fw-bold">{{ ticket.ticketPlan.name }}</h1>
+                    <div class="col-lg-6 mx-auto">
+                        <div class="lead mb-4">
+                            Lo sentimos, a excedido el tiempo de 15 minutos para finalizar la compra,
+                            debe volver a iniciar el proceso
+                        </div>
+                        <div class="lead mb-4">
+                            <a href="/buy/{{ ticket.ticketPlan.slug }}/attendee"
+                               type="button" class="w-100 btn btn-lg btn-primary">Volver a iniciar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+{% endblock %}

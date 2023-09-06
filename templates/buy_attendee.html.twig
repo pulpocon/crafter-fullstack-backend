@@ -1,0 +1,157 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    {% set ticketPlan = ticket.ticketPlan %}
+    {% set ticketOrigin = ticket.upgradedFrom %}
+    <div class="p-3">
+        <div class="pb-3 text-center">
+            <h2>Checkout form</h2>
+            <p class="lead">Por favor complete el siguiente formulario con la información del asistente</p>
+        </div>
+        <div class="row g-5">
+            <div class="col-md-5 col-lg-4 order-md-last">
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    Tu entrada
+                </h4>
+                <ul class="list-group mb-3">
+                    <li class="list-group-item d-flex justify-content-between lh-sm">
+                        <div>
+                            <h6 class="my-0">{{ ticketPlan.name }}</h6>
+                            <small class="text-muted">{{ ticketPlan.description|raw }}</small>
+                        </div>
+                        {% if ticketPlan.free %}
+                            <span class="text-muted">
+                                <span class="text-decoration-line-through">{{ ticketPlan.price | format_currency('EUR', {fraction_digit: 2}) }}</span>
+                                {{ 0 | format_currency('EUR', {fraction_digit: 2}) }}
+                            </span>
+                        {% elseif ticketOrigin %}
+                            <span class="text-muted">
+                                <span class="text-decoration-line-through">{{ ticketPlan.price | format_currency('EUR', {fraction_digit: 2}) }}</span>
+                                <br />
+                                {{ (ticketPlan.price - ticketOrigin.ticketPlan.price) | format_currency('EUR', {fraction_digit: 2}) }}
+                            </span>
+                        {% else %}
+                            <span class="text-muted">{{ ticketPlan.price | format_currency('EUR', {fraction_digit: 2}) }}</span>
+                        {% endif %}
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between lh-sm">
+                        <div>
+                            <h6 class="my-0">IVA</h6>
+                            <small class="text-muted">21%</small>
+                        </div>
+                        {% if ticketPlan.free %}
+                            <span class="text-muted">
+                                <span class="text-decoration-line-through">{{ ticketPlan.tax | format_currency('EUR', {fraction_digit: 2}) }}</span>
+                                <br />
+                                {{ 0 | format_currency('EUR', {fraction_digit: 2}) }}
+                            </span>
+                        {% elseif ticketOrigin %}
+                            <span class="text-muted text-right">
+                                <span class="text-decoration-line-through">{{ ticketPlan.tax | format_currency('EUR', {fraction_digit: 2}) }}</span>
+                                <br />
+                                {{ (ticketPlan.tax - ticketOrigin.ticketPlan.tax) | format_currency('EUR', {fraction_digit: 2}) }}
+                            </span>
+                        {% else %}
+                            <span class="text-muted">{{ ticketPlan.tax | format_currency('EUR', {fraction_digit: 2}) }}</span>
+                        {% endif %}
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Total (EUR)</span>
+                        <strong>
+                            {% if ticketPlan.free %}
+                                {{ 0 | format_currency('EUR', {fraction_digit: 2}) }}
+                            {% elseif ticketOrigin %}
+                                <span class="text-decoration-line-through">{{ ticketPlan.totalPrice | format_currency('EUR', {fraction_digit: 2}) }}</span>
+                                <br />
+                                {{ (ticketPlan.totalPrice - ticketOrigin.ticketPlan.totalPrice) | format_currency('EUR', {fraction_digit: 2}) }}
+                            {% else %}
+                                {{ ticketPlan.totalPrice | format_currency('EUR', {fraction_digit: 2}) }}
+                            {% endif %}
+                        </strong>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-7 col-lg-8">
+                {# {{ form(formUpgrade) }} #}
+                <h4 class="mt-0 mb-3">Datos de la persona asistente</h4>
+                {{ form_start(form) }}
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            {{ form_row(form.name) }}
+                            <div class="invalid-feedback">
+                                Valid first name is required.
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            {{ form_row(form.surname) }}
+                            <div class="invalid-feedback">
+                                Valid last name is required.
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            {{ form_row(form.email) }}
+                            <div class="invalid-feedback">
+                                Please enter a valid email address for shipping updates.
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            {{ form_row(form.emailInvoice) }}
+                            <div class="invalid-feedback">
+                                Please enter a valid email address for shipping updates.
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            {{ form_row(form.shirtType) }}
+                            <div class="invalid-feedback">
+                                Please provide a valid state.
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            {{ form_row(form.shirtSize) }}
+                            <div class="invalid-feedback">
+                                Please select a valid country.
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            {{ form_row(form.feeding) }}
+                            <div class="invalid-feedback">
+                                Please provide a valid state.
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            {{ form_row(form.allergies) }}
+                        </div>
+                        <div class="col-12">
+                            <div class=" form-check">
+                                {{ form_row(form.ticketConditions) }}
+                            </div>
+                        </div>
+
+                        <h5 class="mt-4">Alojamiento oficial #pulpoCon23: NH Collection Vigo</h5>
+                        <div class="col-12">
+                            <p>
+                                Como asistente de la PulpoCon puedes aprovechar la oferta especial que uno de los mejores
+                                hoteles de la ciudad (dónde se alojan los speakers) ha preparado para nosotros (precios por noche).
+                            </p>
+                            <ul>
+                                <li>Habitación doble para uso individual: 105 € + IVA con desayuno buffet incluido</li>
+                                <li>Habitación doble para uso doble: 115 € + IVA con desayuno buffet incluido</li>
+                            </ul>
+                            <p>
+                                Para beneficiarte de la oferta sólo tienes que seguir los pasos que te indicaremos
+                                en el mail de confirmación de la compra de la entrada.
+                            </p>
+                        </div>
+                    </div>
+                    <hr class="my-4">
+                    <div class="visually-hidden">{{ form_row(form.upgradedFrom) }}</div>
+                    {{ form_row(form.save) }}
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

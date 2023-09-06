@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
+    {% block stylesheets %}
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+              integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+              crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
+        {{ encore_entry_link_tags('app') }}
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Domine:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    {% endblock %}
+
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+</head>
+<body>
+{% block header %}
+<div class="container-fluid pt-3">
+    <div class="container">
+        <div class="row row-cols-1">
+            <div class="p-0 d-md-block">
+                <a href="/" title="Entradas PulpoCon23"><img src="{{ asset('images/pulpoCon23.jpg') }}" class="img-fluid rounded-top" alt="pulpoCon"></a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+<div class="container py-3 shadow  main-content">
+    <main>
+{% block body %}{% endblock %}
+    </main>
+</div>
+{% block footer %}
+<footer class="bg-primary container-fluid" >
+    <div class="container">
+        <a href="https://pulpocon.es" target="_blank" title="PulpoCon22" >Volver a pulpocon.es</a> |
+        <a href="{{ path('condiciones-entrada') }}" title="Condiciones de venta de entradas" >Condiciones de venta de entradas</a> |
+        <a href="{{ path('politica-privacidad') }}" title="Política de privacidad">Política de privacidad</a>
+    </div>
+</footer>
+{% endblock %}
+</body>
+</html>

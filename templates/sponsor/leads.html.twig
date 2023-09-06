@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block body %}
+<div class="container py-3">
+    <main class="buy-thanks p-3">
+        <header class="text-center">
+            <h2 class="mb-3 fw-bold" style="word-break: break-all">Leads</h2>
+        </header>
+        <div class="text-center mb-3">
+            <a href="{{ path('sponsor_scan') }}" title="" class="btn btn-secondary">Scan</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <tr>
+                    <th>Name</th>
+                    <th>Surname</th>
+                    <th>Info</th>
+                </tr>
+                {% for lead in leads %}
+                    <tr>
+                        <td>{{ lead.attendeeInfo.name }}</td>
+                        <td>{{ lead.attendeeInfo.surname }}</td>
+                        <td>
+                            <a href="{{ path('sponsor_lead_information', {id: lead.id}) }}" class="btn btn-dark">
+                                <i class="bi bi-info-lg"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="text-center mb-3">
+            <a href="{{ path('sponsor_scan') }}" title="" class="btn btn-secondary">Scan</a>
+        </div>
+    </main>
+</div>
+{% endblock %}

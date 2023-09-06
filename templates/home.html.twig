@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+{% block title %}Consigue tu entrada!!! PulpoCon23: 7, 8 y 9 de Septiembre de 2023.{% endblock %}
+{% block body %}
+    <h1 class="mt-2 mb-4 text-primary text-center">Entradas PulpoCon23</h1>
+    <div class="row row-cols-1 row-cols-md-2 mb-3 text-center">
+        <div class="col m-auto">
+            <p><strong>¿Te gustaría asistir a la cena de speakers de la #pulpoCon23 🆓?</strong></p>
+            <p>
+                Sortearemos 2 🪑 en la cena de speakers del viernes: Compra cualquiera de las 🎟️ de la 🐙 con acceso a
+                los 3 días antes del 31/07 y tendrás 1 participación, si lo haces antes del 15 serán 2.
+            </p>
+        </div>
+    </div>
+    <div class="row row-cols-1 row-cols-md-2 mb-3 text-center">
+        {% for ticketPlan in ticketPlanArray %}
+            <div class="col">
+                <div class="card mb-3 rounded-0 shadow-sm">
+                    <div class="card-header py-3">
+                        <h4 class="my-0 fw-normal">{{ ticketPlan.name }}</h4>
+                    </div>
+                    <div class="card-body">
+                        <h1 class="card-title pricing-card-title">{{ ticketPlan.totalPrice | format_currency('EUR', {fraction_digit: 2}) }}</h1>
+                        <p>{{ ticketPlan.description|raw }}</p>
+                        {% if ticketPlan.availableTickets <= 0 %}
+                            <button type="button" class="w-100 btn btn-lg btn-primary" disabled>Agotado<i
+                                        class="bi bibi-emo-emoji-frown"></i></button>
+                        {% elseif ticketPlan.fewQuantityAlertIsNeeded %}
+                            <a href="/buy/{{ ticketPlan.slug }}/attendee" type="button"
+                               class="w-100 btn btn-lg btn-primary">¡Sólo {{ ticketPlan.availableTickets }} entradas! <i class="bi bi-bag-heart"></i></a>
+                        {% elseif ticketPlan.active == false %}
+                            <button type="button" class="w-100 btn btn-lg btn-primary" disabled>Próximamente <i
+                                        class="bi bi-emoji-wink-fill"></i></button>
+                        {% else %}
+                            <a href="/buy/{{ ticketPlan.slug }}/attendee" type="button"
+                               class="w-100 btn btn-lg btn-primary">Comprar <i class="bi bi-bag-heart"></i></a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

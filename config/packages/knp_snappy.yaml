@@ -1,0 +1,20 @@
+knp_snappy:
+    pdf:
+        enabled:    true
+        binary:     '%env(WKHTMLTOPDF_PATH)%'
+        options:
+            #viewport-size: '1280x1024'
+            page-size: false
+            page-width: '640px'
+            page-height: '720px'
+            lowquality: false
+            disable-smart-shrinking: false
+            margin-top: 0
+            margin-left: 0
+            margin-right: 0
+            margin-bottom: 0
+            encoding: 'UTF-8'
+    image:
+        enabled:    true
+        binary:     '%env(WKHTMLTOIMAGE_PATH)%'
+        options:    []

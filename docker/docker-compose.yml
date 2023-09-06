@@ -1,0 +1,60 @@
+version: "3.0"
+services:
+  php-fpm:
+    build:
+      context: .
+      dockerfile: ./php-fpm/Dockerfile
+      args:
+        - LOCAL_UID=${APPLICATIONS_UID}
+        - LOCAL_GID=${APPLICATIONS_GID}
+    container_name: crafterFullstack-php-fpm
+    working_dir: /application
+    environment:
+      - PHP_IDE_CONFIG=serverName=entradas.pulpocon.es
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - ../:/application:cached
+      - ./php-fpm/php-ini-overrides.ini:/etc/php/7.3/fpm/conf.d/99-overrides.ini
+
+  webserver:
+    image: nginx:alpine
+    container_name: crafterFullstack-webserver
+    working_dir: /application
+    environment:
+      - VIRTUAL_HOST=entradas.pulpocon.es
+    volumes:
+      - ../:/application
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 8086:80
+
+  mysql:
+    build:
+      context: .
+      dockerfile: mysql/Dockerfile
+      args:
+        - LOCAL_UID=${APPLICATIONS_UID}
+        - LOCAL_GID=${APPLICATIONS_GID}
+    container_name: crafterFullstack-mysql
+    volumes:
+      - ./volumes/mysql:/var/lib/mysql
+      - ./mysql/database:/docker-entrypoint-initdb.d/:ro
+    environment:
+      - MYSQL_ROOT_PASSWORD=db_password
+      - MYSQL_DATABASE=db_name
+      - MYSQL_USER=db_user
+      - MYSQL_PASSWORD=db_password
+    ports:
+      - "3306:3306"
+
+  smtp-localserver:
+    image: mailhog/mailhog
+    container_name: crafterFullstack-smtp
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+networks:
+  default:
+    external:
+      name: pulpocon

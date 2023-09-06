@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Gracias!!!!</title>
+    <style>
+        a {
+            color: #1F466F;
+        }
+    </style>
+</head>
+<body>
+<div style="margin-bottom: 30px">
+    <img src="https://entradas.pulpocon.es/images/pulpoCon23.png" width="150" alt="" />
+</div>
+<p>Hola <strong>{{ ticket.name }}</strong>, gracias por ser parte del evento #GastroTech del año!!!</p>
+<p>
+    Como en la anterior edición, hemos creado un servidor de Discord para que las que vamos a estar en la #pulpoCon23 vayamos calentando motores.
+</p>
+<p>
+    No lo dudes, vente a nuestro canal de Discord y entérate de todas las novedades antes que nadie... y conoce a más gente que también estará en
+    Septiembre en la pulpo.
+</p>
+<p><a href="https://discord.gg/NxgKZ6uszh">https://discord.gg/NxgKZ6uszh</a></p>
+<h2>Solicitud de factura</h2>
+<p>
+    Si necesitas que emitamos una factura, sólo debes rellenar el siguiente formulario... ¡¡¡¡NO!!!! Este año puedes generar tú mismo la factura,
+    sólo necesitas el número de referencia de la entrada y el email que has puesto como email de facturación y entrar en
+    <a href="https://entradas.pulpocon.es/attendee/invoice" target="_blank">https://entradas.pulpocon.es/attendee/invoice</a>
+</p>
+<h2>Guía del asistente</h2>
+<p>
+    Al igual que el año pasado hemos creado una guía del attendee en la que te contamos todo lo que creemos que debes saber para que
+    tu visita a Vigo sea tan grande que te vayas con ganas de mudarte a #Galiforna, el sur del norte:
+    <a href="https://bit.ly/pulpoCon23AttendeeGuide" target="_blank">https://bit.ly/pulpoCon23AttendeeGuide</a>
+</p>
+<h2>Alojamiento oficial #pulpoCon23: NH Collection Vigo</h2>
+<p>
+    Como asistente de la PulpoCon puedes aprovechar la oferta especial que uno de los mejores
+    hoteles de la ciudad (dónde se alojan los speakers) ha preparado para nosotros (precios por noche):
+</p>
+<ul>
+     <li>Habitación doble para uso individual: 105 € + IVA con desayuno buffet incluido</li>
+     <li>Habitación doble para uso doble: 115 € + IVA con desayuno buffet incluido</li>
+</ul>
+<p>
+    Para beneficiarte de la oferta sólo tienes que enviar un email con el asunto "Alojamiento PulpoCon23" a
+    N.FERNANDEZ@nh-hotels.com indicando las noches deseadas y si la habitación será para uso doble o individual.
+</p>
+<h2>Tu entrada</h2>
+<p>
+    Adjunto a este correo están tus entradas para acceder a la #pulpoCon23.
+    Eso sí, también tienes este código QR podrás acceder al evento en la modalidad {{ ticket.ticketPlan.name }}</p>
+<p>
+    <img src="cid:QR_{{ ticket.reference }}.png" alt="{{ ticket.reference }}">
+    <br/>
+    {{ ticket.reference }}
+</p>
+<p class="font-size: 12px">No es necesario que lo imprimas, puedes llevarlo en la pantalla de tu móvil.</p>
+<footer style="margin-top: 40px;">
+    <a href="https://pulpocon.es/" target="_blank">
+        Website
+    </a>
+    &nbsp;|&nbsp;
+    <a href="https://twitter.com/phpulpocon" target="_blank">
+        Twitter
+    </a>
+</footer>
+</body>
+</html>

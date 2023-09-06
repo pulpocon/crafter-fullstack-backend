@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="/html5-qrcode.min.js"></script>
+{% endblock %}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block body %}
+    <h1 class="mt-2 mb-4 text-center">Lead - QR Scanner</h1>
+    <div class="text-center mb-3">
+        <a href="{{ path('sponsor_leads') }}" title="" class="btn btn-secondary">Volver</a>
+    </div>
+        <div id="reader" class="m-auto w-100"></div>
+    <script>
+        function onScanSuccess(decodedText) {
+            html5QrcodeScanner.clear().then(ignore => {
+                window.location.replace(`/sponsor/scan/${decodedText}`);
+            })
+        }
+
+        var html5QrcodeScanner = new Html5QrcodeScanner(
+            "reader", { fps: 10, qrbox: 250 });
+        html5QrcodeScanner.render(onScanSuccess);
+    </script>
+{% endblock %}

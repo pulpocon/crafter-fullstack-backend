@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <h1 class="mt-2 mb-4 text-primary text-center">{{ ticketPlan.name }} agotado!!</h1>
+    <div class="row row-cols-1 row-cols-md-2 mb-3 text-center">
+        <div class="col m-auto">
+            <p>Lo sentimos, no quedan entradas disponibles para el plan "{{ ticketPlan.name }}"</p>
+            <p>Pero aún puedes adquirir cualquiera de las entradas disponibles</p>
+            <p><a href="/" type="button" class="w-100 btn btn-lg btn-primary">Ver entradas disponibles</a></p>
+        </div>
+    </div>
+{% endblock %}

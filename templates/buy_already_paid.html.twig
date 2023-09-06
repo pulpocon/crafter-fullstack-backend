@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="container p-3">
+        <main>
+            <div class="row row-cols-1 text-center">
+                <h1>Acceso ya pagado</h1>
+                <p>El acceso al que intentas acceder ya ha sido pagado, te mostramos a continuación los datos</p>
+            </div>
+            <div class="card mb-3 rounded-3 shadow-sm p-0">
+                <div class="card-header py-3">
+                    <h4 class="my-0 fw-normal">
+                        <i class="bi bi-person-badge-fill"></i>
+                        Tus datos
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">Referencia:</dt>
+                        <dd class="col-sm-9">{{ ticket.reference }}</dd>
+                        <dt class="col-sm-3">Tipo de entrada:</dt>
+                        <dd class="col-sm-9">{{ ticket.ticketPlan.name }}</dd>
+                        <dt class="col-sm-3">Nombre y apellidos:</dt>
+                        <dd class="col-sm-9">{{ ticket.name }} {{ ticket.surname }}</dd>
+                        <dt class="col-sm-3">Email:</dt>
+                        <dd class="col-sm-9">{{ ticket.email }}</dd>
+                        <dt class="col-sm-3">Camiseta:</dt>
+                        <dd class="col-sm-9">{{ ticket.shirtSize }}, {{ ticket.shirtType }}</dd>
+                        <dt class="col-sm-3">Alimentación:</dt>
+                        <dd class="col-sm-9">{{ ticket.feeding }}<br/>{{ ticket.allergies }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </main>
+    </div>
+{% endblock %}

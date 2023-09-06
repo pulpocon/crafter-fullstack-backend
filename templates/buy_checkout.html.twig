@@ -1,0 +1,134 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    {% set totalPrice = ticketOrigin ? ticket.ticketPlan.totalPrice - ticketOrigin.ticketPlan.totalPrice : ticket.ticketPlan.totalPrice %}
+    <div class="text-center py3 px-5">
+        <h1 class="display-5 fw-bold">{{ ticket.ticketPlan.name }}</h1>
+        <div class="col-lg-6 mx-auto">
+            <p class="lead mb-4">
+                Una vez finalizada la compra recibirás un correo de confirmación a
+                <strong>{{ ticket.email }}</strong>
+            </p>
+            <p class="h4">
+                Total a pagar:
+                {% if ticketOrigin %}
+                    <span class="text-decoration-line-through">{{ ticket.ticketPlan.totalPrice | format_currency('EUR', {fraction_digit: 2}) }}</span>
+                    {{ totalPrice | format_currency('EUR', {fraction_digit: 2}) }}
+                {% else %}
+                    {{ totalPrice | format_currency('EUR', {fraction_digit: 2}) }}
+                {% endif %}
+            </p>
+            <p class="h2"><i class="bi bi-alarm"></i> <span id="timer"></span></p>
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mt-4">
+                <div id="paypal-button-container"></div>
+            </div>
+        </div>
+    </div>
+    <div id="loader" class="visually-hidden row h-100 w-100 top-0">
+        <div class="text-center col-sm-12 my-auto">
+            <div class="spinner-grow text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="spinner-grow text-secondary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="spinner-grow text-success" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="spinner-grow text-danger" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="spinner-grow text-warning" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="spinner-grow text-info" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="spinner-grow text-light" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="spinner-grow text-dark" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="h3 text-light">Por favor, no cierre la pantalla, será redirigido cuando el proceso termine</p>
+        </div>
+    </div>
+
+    <script src="https://www.paypal.com/sdk/js?client-id={{ paypal_client_id }}&currency={{ paypal_currency }}&intent=capture&disable-funding=card,sofort"></script>
+    <script>
+
+        const canBuyUntil = new Date(new Date("{{ ticket.startDate.format('Y-m-d\\TH:i:sO') }}").getTime() + 5 * 60000);
+        let countDownToBuy = setInterval(function () {
+
+            const distance = canBuyUntil - new Date().getTime();
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("timer").innerHTML = ('0' + minutes).slice(-2) + ":" + ('0' + seconds).slice(-2);
+
+            if (distance < 0) {
+                clearInterval(countDownToBuy);
+                window.location.reload();
+            }
+        }, 1000);
+
+            paypal.Buttons({
+                style: {
+                    shape: 'rect',
+                    height: 40,
+                },
+
+                createOrder: (data, actions) => {
+                    const createOrderPayload = {
+                        purchase_units: [
+                            {
+                                reference_id: "{{ ticket.reference }}",
+                                custom_id: "{{ ticket.hash }}",
+                                amount: {
+                                    currency_code: "EUR",
+                                    value: '{{ totalPrice }}',
+                                },
+                            },
+                        ],
+                        application_context: {
+                            shipping_preference: 'NO_SHIPPING'
+                        }
+                    }
+
+                    return actions.order.create(createOrderPayload)
+                },
+
+                onApprove: (data, actions) => {
+                    document.querySelector('#loader').className = "row h-100 w-100 top-0";
+                    const captureOrderHandler = (details) => {
+                        const xmlhttp = new XMLHttpRequest();
+                        xmlhttp.onload = function (e) {
+                            if (e.currentTarget.status !== 200) {
+                                alert('Se ha producido un error en el pago. Contacte con hello@pulpocon.es explicando la situación y compartiendo su ' +
+                                    'referencia: {{ ticket.reference }}');
+                                return;
+                            }
+                            document.querySelector('#loader').className = "visually-hidden row h-100 w-100 top-0";
+                            window.location.href = '/buy/{{ ticket.ticketPlan.slug }}/thank-you/{{ ticket.reference }}'
+                        }
+                        xmlhttp.onerror = function (e) {
+
+                        }
+                        xmlhttp.onabort = function () {
+
+                        }
+                        xmlhttp.open("POST", '/buy/{{ ticket.ticketPlan.slug }}/finish/{{ ticket.reference }}');
+                        xmlhttp.setRequestHeader("Content-Type", "application/json");
+                        xmlhttp.send(JSON.stringify(details));
+                    }
+
+                    return actions.order.capture().then(captureOrderHandler)
+                },
+                onError: (err) => {
+                    console.error(
+                        'An error prevented the buyer from checking out with PayPal',
+                    )
+                },
+            }).render('#paypal-button-container').then(() => {})
+                .catch((err) => { console.error('PayPal Buttons failed to render')});
+    </script>
+{% endblock %}

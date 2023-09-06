@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block body %}
+<div class="container py-3">
+    <main class="buy-thanks p-3">
+        <header class="text-center">
+            <h2 class="mb-3 fw-bold" style="word-break: break-all">{{ attendee.reference }}</h2>
+        </header>
+        <div class="text-center mb-3">
+            <a href="{{ path('sponsor_leads') }}" title="" class="btn btn-secondary">Volver</a>
+        </div>
+        <div class="card mb-3 rounded-1 shadow-sm p-0 mb-5">
+            <div class="card-header py-3">
+                <h4 class="my-0 fw-normal">
+                    <i class="bi bi-person-badge-fill"></i>
+                    {{ attendee.name }} {{ attendee.surname }}
+                </h4>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">Email:</dt>
+                    <dd class="col-sm-9">{{ attendee.email }}</dd>
+                    <dt class="col-sm-3">Position:</dt>
+                    <dd class="col-sm-9">{{ attendee.position }}</dd>
+                    <dt class="col-sm-3">Experience:</dt>
+                    <dd class="col-sm-9">{{ attendee.years }} year(s)</dd>
+                    <dt class="col-sm-3">Work preference:</dt>
+                    <dd class="col-sm-9">{{ attendee.workPreference | join(', ') }}</dd>
+                    <dt class="col-sm-3">City:</dt>
+                    <dd class="col-sm-9">{{ attendee.city }}</dd>
+                    <dt class="col-sm-3">State:</dt>
+                    <dd class="col-sm-9">{{ attendee.state }}</dd>
+                </dl>
+            </div>
+        </div>
+        <div class="text-center mb-3">
+            <a href="{{ path('sponsor_leads') }}" title="" class="btn btn-secondary">Volver</a>
+        </div>
+    </main>
+</div>
+{% endblock %}
