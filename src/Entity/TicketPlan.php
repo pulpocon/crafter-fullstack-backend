@@ -194,6 +194,11 @@ class TicketPlan
         return $this;
     }
 
+    public function canBeBought() : bool
+    {
+        return $this->getAvailableTickets() > 0;
+    }
+
     public function getAvailableTickets() : int
     {
         $available = $this->quantity - $this->totalTicketsNotRevoked();

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Ticket;
+use App\Entity\TicketPlan;
 use App\Form\TicketType;
 use App\Form\TicketUpgradeType;
 use App\Repository\TicketPlanRepository;
@@ -22,20 +23,48 @@ class BuyController extends AbstractController
         private TicketRepository $ticketRepository
     ) {}
 
-    #[Route('/buy/{slug}/attendee', name: 'buy_attendee')]
-    public function index(string $slug, Request $request) : Response
+    #[Route('/buy/{slug}/attendee', name: 'buy_attendee', methods: ['get'])]
+    public function index(string $slug) : Response
+    {
+        $ticketPlan = $this->obtainTicketPlan($slug);
+        if (false === $ticketPlan->canBeBought()) {
+            return $this->getNotAvailableViewToRender($ticketPlan);
+        }
+
+        $ticket = Ticket::fromPlan($ticketPlan);
+        return $this->getBuyAttendeeViewToRender($ticket);
+    }
+
+    /**
+     * @param string $slug
+     * @return TicketPlan|null
+     */
+    private function obtainTicketPlan(string $slug): ?TicketPlan
     {
         $ticketPlan = $this->ticketPlanRepository->findOneBy(['slug' => $slug]);
+        $this->ticketPlanIsValidOrFail($ticketPlan);
+        return $ticketPlan;
+    }
+
+    /**
+     * @param TicketPlan|null $ticketPlan
+     * @return void
+     */
+    private function ticketPlanIsValidOrFail(?TicketPlan $ticketPlan): void
+    {
         if (null === $ticketPlan || !$ticketPlan->isActive()) {
             throw new NotFoundHttpException();
         }
+    }
 
-        if ($ticketPlan->getAvailableTickets() === 0) {
-            return $this->renderForm('buy_not_available.html.twig', [
-                'ticketPlan' => $ticketPlan
-            ]);
-        }
 
+    /**
+     * @param Request $request
+     * @param TicketPlan $ticketPlan
+     * @return array
+     */
+    private function upgradeTicket(Request $request, TicketPlan $ticketPlan): array
+    {
         $formUpgrade = $this->createForm(TicketUpgradeType::class, null);
         $formUpgrade->handleRequest($request);
 
@@ -52,6 +81,20 @@ class BuyController extends AbstractController
                 }
             }
         }
+        return array($formUpgrade, $ticket);
+    }
+
+    #[Route('/buy/{slug}/attendee', name: 'buy_attendee_post', methods: ['post'])]
+    public function handlePost(string $slug, Request $request) : Response
+    {
+        $ticketPlan = $this->obtainTicketPlan($slug);
+
+        if ($ticketPlan->getAvailableTickets() === 0) {
+            return $this->getNotAvailableViewToRender($ticketPlan);
+        }
+
+        list($formUpgrade, $ticket) = $this->upgradeTicket($request, $ticketPlan);
+
         $form = $this->createForm(TicketType::class, $ticket);
 
         $form->handleRequest($request);
@@ -62,11 +105,37 @@ class BuyController extends AbstractController
             return $this->redirectToRoute('buy_checkout', ['slug' => $slug, 'reference' => $ticket->getReference()]);
         }
 
+        return $this->getBuyAttendeeViewToRender($ticket);
+    }
+
+    /**
+     * @param TicketPlan|null $ticketPlan
+     * @return Response
+     */
+    private function getNotAvailableViewToRender(?TicketPlan $ticketPlan): Response
+    {
+        return $this->renderForm('buy_not_available.html.twig', [
+            'ticketPlan' => $ticketPlan
+        ]);
+    }
+
+    /**
+     * @param \Symfony\Component\Form\FormInterface $formUpgrade
+     * @param \Symfony\Component\Form\FormInterface $form
+     * @param Ticket $ticket
+     * @return Response
+     */
+    public function getBuyAttendeeViewToRender(Ticket $ticket): Response
+    {
+        $formUpgrade = $this->createForm(TicketUpgradeType::class, null);
+        $form = $this->createForm(TicketType::class, $ticket);
+
         return $this->renderForm('buy_attendee.html.twig', [
             'formUpgrade' => $formUpgrade,
             'form' => $form,
             'ticket' => $ticket
         ]);
     }
+
 
 }
