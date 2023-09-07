@@ -36,6 +36,12 @@ services:
         - LOCAL_UID=${APPLICATIONS_UID}
         - LOCAL_GID=${APPLICATIONS_GID}
     container_name: crafterFullstack-mysql
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 26677
+        hard: 46677
+
     volumes:
       - ./volumes/mysql:/var/lib/mysql
       - ./mysql/database:/docker-entrypoint-initdb.d/:ro
